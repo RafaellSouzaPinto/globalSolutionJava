@@ -1,8 +1,7 @@
 package org.example.repositories;
 
-import org.example.entities.Pessoa;
+import org.example.entitiesfinal.Pessoa;
 import org.example.infrastructure.ConnectionFactory;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,7 +46,7 @@ public class PessoaRepo {
                 pessoa.setEmail(rs.getString("email"));
                 return pessoa;
             } else {
-                // Credenciais incorretas
+
                 return null;
             }
         }
@@ -61,18 +60,14 @@ public class PessoaRepo {
              PreparedStatement stmtSelect = conn.prepareStatement(sqlSelect);
              PreparedStatement stmtUpdate = conn.prepareStatement(sqlUpdate)) {
 
-            // Recupera a senha atual do banco de dados
             stmtSelect.setInt(1, pessoaId);
             ResultSet rs = stmtSelect.executeQuery();
 
             if (rs.next()) {
                 String senhaBanco = rs.getString("senha");
 
-                // Verifica se a senha atual fornecida corresponde à senha no banco
                 if (senhaBanco.equals(senhaAtual)) {
-                    // Valida a nova senha
                     if (novaSenha.length() >= 8) {
-                        // Atualiza a senha no banco de dados
                         stmtUpdate.setString(1, novaSenha);
                         stmtUpdate.setInt(2, pessoaId);
 
@@ -82,11 +77,9 @@ public class PessoaRepo {
                         throw new IllegalArgumentException("A nova senha deve ter no mínimo 8 caracteres.");
                     }
                 } else {
-                    // Senha atual não coincide
                     return false;
                 }
             } else {
-                // Usuário não encontrado
                 return false;
             }
         }
@@ -94,18 +87,24 @@ public class PessoaRepo {
 
 
 
+    // Método para excluir conta da pessoa e seus trajetos associados
     public boolean excluirConta(int pessoaId) throws SQLException {
-        String sql = "DELETE FROM pessoas WHERE id = ?";
+        TrajetoRepository trajetoRepo = new TrajetoRepository();
 
+        // Primeiro, exclua todos os trajetos da pessoa
+        trajetoRepo.excluirTrajetosPorPessoaId(pessoaId);
+
+        // Em seguida, exclua a própria pessoa
+        String sql = "DELETE FROM pessoas WHERE id = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, pessoaId);
-
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         }
     }
+
     public boolean emailExiste(String email) throws SQLException {
         String sql = "SELECT COUNT(*) FROM pessoas WHERE email = ?";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -144,6 +143,8 @@ public class PessoaRepo {
                 pessoa.setNome(rs.getString("nome"));
                 pessoa.setCpf(rs.getString("cpf"));
                 pessoa.setEmail(rs.getString("email"));
+                pessoa.setPontos(rs.getInt("pontos"));
+                pessoa.setCreditos(rs.getInt("creditos"));
                 // Não defina a senha para segurança
                 return pessoa;
             } else {

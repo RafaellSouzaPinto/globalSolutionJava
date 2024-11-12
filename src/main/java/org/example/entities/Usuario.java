@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.entitiesfinal.Pessoa;
+
 import java.util.ArrayList;
 import java.util.List;
 

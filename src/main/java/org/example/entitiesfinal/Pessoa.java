@@ -1,6 +1,5 @@
-package org.example.entities;
+package org.example.entitiesfinal;
 
-import org.mindrot.jbcrypt.BCrypt;
 
 public class Pessoa {
     private int id;
@@ -8,6 +7,9 @@ public class Pessoa {
     private String cpf;
     private String senha;
     private String email;
+
+    private int pontos;
+    private int creditos;
 
     public Pessoa() {}
 
@@ -57,5 +59,20 @@ public class Pessoa {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    public int getPontos() {
+        return pontos;
+    }
+
+    public void setPontos(int pontos) {
+        this.pontos = pontos;
+    }
+
+    public int getCreditos() {
+        return creditos;
+    }
+
+    public void setCreditos(int creditos) {
+        this.creditos = creditos;
     }
 }
