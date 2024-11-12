@@ -1,14 +1,15 @@
 package org.example.entities;
 
-public class Pessoa {
-    protected int id;
-    protected String nome;
-    protected String cpf;
-    protected String senha;
-    protected String email;
+import org.mindrot.jbcrypt.BCrypt;
 
-    public Pessoa() {
-    }
+public class Pessoa {
+    private int id;
+    private String nome;
+    private String cpf;
+    private String senha;
+    private String email;
+
+    public Pessoa() {}
 
     public Pessoa(int id, String nome, String cpf, String email, String senha) {
         this.id = id;
@@ -17,7 +18,6 @@ public class Pessoa {
         this.email = email;
         this.senha = senha;
     }
-
 
     public int getId() {
         return id;

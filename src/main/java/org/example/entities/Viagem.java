@@ -7,26 +7,22 @@ public class Viagem {
     private int id;
     private Usuario usuario;
     private MeioTransporte meioTransporte;
-    private String origem;
-    private String destino;
-    private float distancia;
-    private LocalDateTime dataHora;
-    private float velocidade;
+    private String enderecoOrigem;
+    private String enderecoDestino;
+    private double distancia;
     private int pontosGanhos;
 
     public Viagem() {
     }
 
-    public Viagem(int pontosGanhos, float velocidade, LocalDateTime dataHora, float distancia, String destino, String origem, MeioTransporte meioTransporte, Usuario usuario, int id) {
-        this.pontosGanhos = pontosGanhos;
-        this.velocidade = velocidade;
-        this.dataHora = dataHora;
-        this.distancia = distancia;
-        this.destino = destino;
-        this.origem = origem;
-        this.meioTransporte = meioTransporte;
-        this.usuario = usuario;
+    public Viagem(int id, Usuario usuario, MeioTransporte meioTransporte, String enderecoOrigem, String enderecoDestino, double distancia, int pontosGanhos) {
         this.id = id;
+        this.usuario = usuario;
+        this.meioTransporte = meioTransporte;
+        this.enderecoOrigem = enderecoOrigem;
+        this.enderecoDestino = enderecoDestino;
+        this.distancia = calcularDistancia();
+        this.pontosGanhos = calcularPontos();
     }
 
     public int getId() {
@@ -53,44 +49,28 @@ public class Viagem {
         this.meioTransporte = meioTransporte;
     }
 
-    public String getOrigem() {
-        return origem;
+    public String getEnderecoOrigem() {
+        return enderecoOrigem;
     }
 
-    public void setOrigem(String origem) {
-        this.origem = origem;
+    public void setEnderecoOrigem(String enderecoOrigem) {
+        this.enderecoOrigem = enderecoOrigem;
     }
 
-    public String getDestino() {
-        return destino;
+    public String getEnderecoDestino() {
+        return enderecoDestino;
     }
 
-    public void setDestino(String destino) {
-        this.destino = destino;
+    public void setEnderecoDestino(String enderecoDestino) {
+        this.enderecoDestino = enderecoDestino;
     }
 
-    public float getDistancia() {
+    public double getDistancia() {
         return distancia;
     }
 
-    public void setDistancia(float distancia) {
+    public void setDistancia(double distancia) {
         this.distancia = distancia;
-    }
-
-    public LocalDateTime getDataHora() {
-        return dataHora;
-    }
-
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
-    }
-
-    public float getVelocidade() {
-        return velocidade;
-    }
-
-    public void setVelocidade(float velocidade) {
-        this.velocidade = velocidade;
     }
 
     public int getPontosGanhos() {
@@ -100,16 +80,20 @@ public class Viagem {
     public void setPontosGanhos(int pontosGanhos) {
         this.pontosGanhos = pontosGanhos;
     }
+    public double calcularDistancia() {
+        Coordenadas origem = GeocodingUtils.geocodeEndereco(enderecoOrigem);
+        Coordenadas destino = GeocodingUtils.geocodeEndereco(enderecoDestino);
 
-    private float calcularVelocidade() {
-        // Implementar cálculo de velocidade com base na distância e tempo
-        return this.meioTransporte.getVelocidadeMedia();
-    }
-    private int calcularPontos() {
-        int pontosBase = (int) this.distancia; // Cada 1 km = 1 ponto
-        if (this.usuario.getPlano().getNome().equalsIgnoreCase("Super Verdí")) {
-            pontosBase *= 1.5;
+        if (origem != null && destino != null) {
+            return GeocodingUtils.calcularDistancia(origem, destino);
+        } else {
+            System.out.println("Não foi possível obter as coordenadas dos endereços.");
+            return 0;
         }
-        return pontosBase;
+    }
+
+    public int calcularPontos() {
+        this.pontosGanhos = (int) Math.floor(this.distancia);
+        return this.pontosGanhos;
     }
 }

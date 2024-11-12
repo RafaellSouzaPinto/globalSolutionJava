@@ -2,7 +2,9 @@ package org.example;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.entities.Pessoa;
 import org.example.filter.CorsFilter;
+import org.example.resource.PessoaResource;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jsonb.JsonBindingFeature;
@@ -26,6 +28,7 @@ public class Main {
         final ResourceConfig rc = new ResourceConfig().packages("br.com.verdi");
         rc.register(JsonBindingFeature.class);
         rc.register(CorsFilter.class);
+        rc.register(PessoaResource.class);
 
         String port = System.getenv("PORT");
         if (port == null || port.isEmpty()) {

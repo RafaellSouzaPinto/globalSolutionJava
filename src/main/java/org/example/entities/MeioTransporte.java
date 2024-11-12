@@ -4,15 +4,13 @@ public class MeioTransporte {
 
     private int id;
     private String nome;
-    private float velocidadeMedia;
 
     public MeioTransporte() {
     }
 
-    public MeioTransporte(int id, String nome, float velocidadeMedia) {
+    public MeioTransporte(int id, String nome) {
         this.id = id;
         this.nome = nome;
-        this.velocidadeMedia = velocidadeMedia;
     }
 
     public int getId() {
@@ -29,13 +27,5 @@ public class MeioTransporte {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public float getVelocidadeMedia() {
-        return velocidadeMedia;
-    }
-
-    public void setVelocidadeMedia(float velocidadeMedia) {
-        this.velocidadeMedia = velocidadeMedia;
     }
 }
