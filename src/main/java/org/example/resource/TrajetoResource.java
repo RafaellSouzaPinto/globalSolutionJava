@@ -84,14 +84,15 @@ public class TrajetoResource {
         }
     }
     @GET
-    @Path("/usuario/{pessoaId}/pontos-e-creditos")
+    @Path("/usuario/{pessoaId}/total")
     public Response consultarPontosECreditos(@PathParam("pessoaId") int pessoaId) {
         try {
             Pessoa pessoa = pessoaRepo.getPessoaById(pessoaId);
             if (pessoa != null) {
                 int pontos = pessoa.getPontos();
                 int creditos = pessoa.getCreditos();
-                return Response.ok("Pontuação: " + pontos + ", Créditos: " + creditos).build();
+                double distanciaAcumulada = pessoa.getDistanciaAcumulada();
+                return Response.ok("Pontuação: " + pontos + ", Créditos: " + creditos + ", Distância acumulada: " + distanciaAcumulada + " km").build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND).entity("Pessoa não encontrada.").build();
             }
@@ -100,6 +101,8 @@ public class TrajetoResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao consultar pontuação e créditos: " + e.getMessage()).build();
         }
     }
+
+
     @GET
     public Response listarTodosOsTrajetos() {
         try {

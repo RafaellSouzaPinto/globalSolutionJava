@@ -4,6 +4,7 @@ import org.example.entitiesfinal.Pessoa;
 import org.example.entitiesfinal.Trajeto;
 import org.example.entitiesfinal.MeioDeTransporte;
 import org.example.infrastructure.ConnectionFactory;
+import org.example.services.TrajetoService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,18 @@ import java.util.List;
 
 public class TrajetoRepository {
 
+    private final TrajetoService trajetoService;
+
+    public TrajetoRepository() {
+        this.trajetoService = new TrajetoService();
+    }
+
     public void salvar(Trajeto trajeto) throws SQLException {
+        // Valida os dados do trajeto antes de salvar
+        if (!trajetoService.validarCadastroTrajeto(trajeto)) {
+            throw new IllegalArgumentException("Dados de trajeto inválidos ou incompletos.");
+        }
+
         String sql = "INSERT INTO trajetos (pessoa_id, origem, destino, distancia_km, pontos, meio_de_transporte) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -54,13 +66,18 @@ public class TrajetoRepository {
     }
 
     public void atualizar(Trajeto trajeto) throws SQLException {
+        // Valida os dados do trajeto antes de atualizar
+        if (!trajetoService.validarCadastroTrajeto(trajeto)) {
+            throw new IllegalArgumentException("Dados de trajeto inválidos ou incompletos.");
+        }
+
         String sql = "UPDATE trajetos SET origem = ?, destino = ?, distancia_km = ?, pontos = ?, meio_de_transporte = ? WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, trajeto.getPessoa().getNome());
-            stmt.setString(2, trajeto.getPessoa().getEmail());
+            stmt.setString(1, trajeto.getOrigem());
+            stmt.setString(2, trajeto.getDestino());
             stmt.setDouble(3, trajeto.getDistanciaKm());
             stmt.setInt(4, trajeto.getPontos());
             stmt.setString(5, trajeto.getMeioDeTransporte().toString());
@@ -132,6 +149,40 @@ public class TrajetoRepository {
         }
         return trajetos;
     }
+    public int getTotalPontosByPessoaId(int pessoaId) {
+        String sql = "SELECT SUM(pontos) FROM trajetos WHERE pessoa_id = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, pessoaId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    public double getTotalDistanciaByPessoaId(int pessoaId) {
+        String sql = "SELECT SUM(distancia_km) FROM trajetos WHERE pessoa_id = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, pessoaId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1);
+            } else {
+                return 0.0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+
 }
 
 

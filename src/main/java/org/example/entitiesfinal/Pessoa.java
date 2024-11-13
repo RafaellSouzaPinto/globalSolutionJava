@@ -10,6 +10,7 @@ public class Pessoa {
 
     private int pontos;
     private int creditos;
+    private double distanciaAcumulada;
 
     public Pessoa() {}
 
@@ -74,5 +75,13 @@ public class Pessoa {
 
     public void setCreditos(int creditos) {
         this.creditos = creditos;
+    }
+
+    public double getDistanciaAcumulada() {
+        return distanciaAcumulada;
+    }
+
+    public void setDistanciaAcumulada(double distanciaAcumulada) {
+        this.distanciaAcumulada = distanciaAcumulada;
     }
 }

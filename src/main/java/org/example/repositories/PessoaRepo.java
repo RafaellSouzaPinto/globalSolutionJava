@@ -130,28 +130,35 @@ public class PessoaRepo {
             return false;
         }
     }
-    public Pessoa getPessoaById(int id) throws SQLException {
-        String sql = "SELECT * FROM pessoas WHERE id = ?";
+    public Pessoa getPessoaById(int id) {
+        String sql = "SELECT id, nome, cpf, senha, email, pontos, creditos, distancia_acumulada FROM pessoas WHERE id = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 Pessoa pessoa = new Pessoa();
                 pessoa.setId(rs.getInt("id"));
                 pessoa.setNome(rs.getString("nome"));
                 pessoa.setCpf(rs.getString("cpf"));
+                pessoa.setSenha(rs.getString("senha"));
                 pessoa.setEmail(rs.getString("email"));
                 pessoa.setPontos(rs.getInt("pontos"));
                 pessoa.setCreditos(rs.getInt("creditos"));
-                // Não defina a senha para segurança
+                pessoa.setDistanciaAcumulada(rs.getDouble("distancia_acumulada")); // Set the accumulated distance
+
                 return pessoa;
             } else {
                 return null;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
+
     public List<Pessoa> getAllPessoas() throws SQLException {
         String sql = "SELECT * FROM pessoas";
         List<Pessoa> pessoas = new ArrayList<>();
