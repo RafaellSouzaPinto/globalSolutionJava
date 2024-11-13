@@ -1,5 +1,4 @@
 package org.example.resource;
-
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -9,59 +8,54 @@ import org.example.entitiesfinal.Trajeto;
 import org.example.repositories.PessoaRepo;
 import org.example.repositories.TrajetoRepository;
 import org.example.services.DistanciaService;
-
-
 import java.util.List;
-
 @Path("/trajetos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class TrajetoResource {
-
     private final TrajetoRepository trajetoRepository;
     private final PessoaRepo pessoaRepo;
     private final DistanciaService distanciaService;
-
     public TrajetoResource() {
         this.trajetoRepository = new TrajetoRepository();
         this.pessoaRepo = new PessoaRepo();
         this.distanciaService = new DistanciaService(trajetoRepository, pessoaRepo);
     }
-
     @POST
     @Path("/registrar")
-    public Response registrarTrajeto(@QueryParam("pessoaId") Integer pessoaId,
-                                     @QueryParam("origem") String origem,
-                                     @QueryParam("destino") String destino,
-                                     @QueryParam("meioDeTransporte") MeioDeTransporte meioDeTransporte) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response registrarTrajeto(Trajeto trajeto) {
         try {
-            System.out.println("Received parameters:");
-            System.out.println("pessoaId: " + pessoaId);
-            System.out.println("origem: " + origem);
-            System.out.println("destino: " + destino);
-            System.out.println("meioDeTransporte: " + meioDeTransporte);
-
-            if (pessoaId == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'pessoaId' é obrigatório.").build();
+            // Validações
+            if (trajeto.getPessoa() == null || trajeto.getPessoa().getId() == 0) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'pessoa' e seu 'id' são obrigatórios.").build();
             }
-            if (origem == null || origem.isEmpty()) {
+            if (trajeto.getOrigem() == null || trajeto.getOrigem().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'origem' é obrigatório.").build();
             }
-            if (destino == null || destino.isEmpty()) {
+            if (trajeto.getDestino() == null || trajeto.getDestino().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'destino' é obrigatório.").build();
             }
-            if (meioDeTransporte == null) {
+            if (trajeto.getMeioDeTransporte() == null) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'meioDeTransporte' é obrigatório.").build();
             }
 
-            distanciaService.registrarTrajeto(pessoaId, origem, destino, meioDeTransporte);
+
+            // Chamada ao serviço com todos os parâmetros
+            distanciaService.registrarTrajeto(
+                    trajeto.getPessoa().getId(),
+                    trajeto.getOrigem(),
+                    trajeto.getDestino(),
+                    trajeto.getMeioDeTransporte()
+            );
+
+
             return Response.status(Response.Status.CREATED).entity("Trajeto registrado com sucesso!").build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao registrar trajeto: " + e.getMessage()).build();
         }
     }
-
 
     @GET
     @Path("/{id}")
@@ -78,7 +72,6 @@ public class TrajetoResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao buscar trajeto: " + e.getMessage()).build();
         }
     }
-
     @GET
     @Path("/usuario/{pessoaId}")
     public Response buscarTrajetosPorPessoaId(@PathParam("pessoaId") int pessoaId) {
@@ -90,7 +83,6 @@ public class TrajetoResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao buscar trajetos: " + e.getMessage()).build();
         }
     }
-
     @GET
     @Path("/usuario/{pessoaId}/pontos-e-creditos")
     public Response consultarPontosECreditos(@PathParam("pessoaId") int pessoaId) {
@@ -108,7 +100,6 @@ public class TrajetoResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao consultar pontuação e créditos: " + e.getMessage()).build();
         }
     }
-
     @GET
     public Response listarTodosOsTrajetos() {
         try {

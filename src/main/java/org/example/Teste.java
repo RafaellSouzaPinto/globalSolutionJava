@@ -25,11 +25,12 @@ public class Teste {
 
             for (int i = 0; i < 3; i++) {
                 String origem = "Rua Otília, 596, Vila Esperança, São Paulo, SP";
-                String destino = "Belo Horizonte";
-                MeioDeTransporte meioDeTransporte = MeioDeTransporte.PATINS;
+                String destino = "Rua mandu, São Paulo";
+                MeioDeTransporte meioDeTransporte = MeioDeTransporte.BICICLETA_ELETRICA;
 
-                // Registrar o trajeto
+
                 distanciaService.registrarTrajeto(pessoaLogada.getId(), origem, destino, meioDeTransporte);
+
             }
 
             Pessoa pessoaAtualizada = pessoaRepo.getPessoaById(pessoaLogada.getId());

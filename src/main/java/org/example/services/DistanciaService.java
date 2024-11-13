@@ -73,10 +73,11 @@ public class DistanciaService {
 
         double[] origemCoord = geocodeAddress(origem);
         double[] destinoCoord = geocodeAddress(destino);
-
         double distanciaKm = calculateDistance(origemCoord, destinoCoord);
+
         int pontosGanhados = (int) distanciaKm;
 
+        // Criar o objeto Trajeto com os dados calculados
         Trajeto trajeto = new Trajeto();
         trajeto.setPessoa(pessoa);
         trajeto.setMeioDeTransporte(meioDeTransporte);
@@ -101,5 +102,8 @@ public class DistanciaService {
 
         System.out.println("Trajeto registrado com sucesso! Distância: " + distanciaKm + " km, Pontos: " + pontosGanhados);
     }
+
+
+
 
 }
