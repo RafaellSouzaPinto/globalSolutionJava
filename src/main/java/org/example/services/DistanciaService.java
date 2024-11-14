@@ -74,46 +74,42 @@ public class DistanciaService {
         return earthRadius * c;
     }
 
+    // DistanciaService.java
+
     public void registrarTrajeto(int pessoaId, String origem, String destino, MeioDeTransporte meioDeTransporte) throws Exception {
         Pessoa pessoa = pessoaRepo.getPessoaById(pessoaId);
         if (pessoa == null) {
             throw new Exception("Pessoa com ID " + pessoaId + " não encontrada.");
         }
 
-        double[] origemCoord;
-        double[] destinoCoord;
-        try {
-            origemCoord = geocodeAddress(origem);
-            destinoCoord = geocodeAddress(destino);
-        } catch (Exception e) {
-            throw new Exception("Erro ao geocodificar o endereço: " + e.getMessage());
-        }
-
+        double[] origemCoord = geocodeAddress(origem);
+        double[] destinoCoord = geocodeAddress(destino);
         double distanciaKm = calculateDistance(origemCoord, destinoCoord);
 
-        // Create and save the new trajectory
         Trajeto trajeto = new Trajeto();
         trajeto.setPessoa(pessoa);
         trajeto.setOrigem(origem);
         trajeto.setDestino(destino);
         trajeto.setDistanciaKm(distanciaKm);
         trajeto.setMeioDeTransporte(meioDeTransporte);
-        trajeto.setPontos((int) Math.floor(distanciaKm));
+
+        // Calcula os pontos considerando o plano
+        int pontosBase = (int) Math.floor(distanciaKm);
+        if ("Plano Super Verdí".equalsIgnoreCase(pessoa.getPlanos())) {
+            trajeto.setPontos((int) Math.floor(pontosBase * 1.5));
+        } else {
+            trajeto.setPontos(pontosBase);
+        }
 
         trajetoRepository.salvar(trajeto);
 
-        // Calculate total accumulated distance
         double distanciaAcumulada = trajetoRepository.getTotalDistanciaByPessoaId(pessoaId);
         pessoa.setDistanciaAcumulada(distanciaAcumulada);
 
-        // Calculate total points based on accumulated distance
-        int pontosTotais = (int) Math.floor(distanciaAcumulada);
-
-        // Calculate credits
+        int pontosTotais = trajetoRepository.getTotalPontosByPessoaId(pessoaId);
         int novosCreditos = pontosTotais / PONTOS_PARA_CREDITO;
         int pontosRestantes = pontosTotais % PONTOS_PARA_CREDITO;
 
-        // Update user's points, credits, and accumulated distance in the database
         String sqlUpdate = "UPDATE pessoas SET pontos = ?, creditos = ?, distancia_acumulada = ? WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -126,7 +122,8 @@ public class DistanciaService {
             stmtUpdate.executeUpdate();
         }
 
-        System.out.println("Trajeto registrado com sucesso! Distância: " + distanciaKm + " km, Distância acumulada: " + distanciaAcumulada + " km, Pontos totais: " + pontosTotais);
+        System.out.println("Trajeto registrado com sucesso! Pontos acumulados: " + pontosTotais);
     }
+
 }
 

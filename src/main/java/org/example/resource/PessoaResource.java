@@ -21,21 +21,21 @@ public class PessoaResource {
     @Path("/cadastro")
     public Response cadastrarPessoa(Pessoa pessoa) {
         try {
-            // Validação de atributos
-            if (!pessoaService.validarNome(pessoa.getNome())) {
+            // Validação de atributos obrigatórios, incluindo o plano
+            if (pessoa.getNome() == null || pessoa.getNome().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Nome é obrigatório.").build();
             }
-            if (!pessoaService.validarCpf(pessoa.getCpf())) {
+            if (pessoa.getCpf() == null || pessoa.getCpf().isEmpty() || !pessoaService.validarCpf(pessoa.getCpf())) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("CPF inválido.").build();
             }
-            if (!pessoaService.validarEmail(pessoa.getEmail())) {
+            if (pessoa.getEmail() == null || pessoa.getEmail().isEmpty() || !pessoaService.validarEmail(pessoa.getEmail())) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Email inválido.").build();
             }
-            if (!pessoaService.validarSenha(pessoa.getSenha())) {
+            if (pessoa.getSenha() == null || pessoa.getSenha().length() < 8) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Senha deve ter no mínimo 8 caracteres.").build();
             }
-            if (pessoa.getPlanos() == null || pessoa.getPlanos().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Plano é obrigatório.").build();
+            if (!"Plano Verdí".equalsIgnoreCase(pessoa.getPlanos()) && !"Plano Super Verdí".equalsIgnoreCase(pessoa.getPlanos())) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Plano inválido. Escolha entre 'Plano Verdí' e 'Plano Super Verdí'.").build();
             }
 
             // Verificação de duplicidade de CPF e Email
