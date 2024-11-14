@@ -17,10 +17,10 @@ public class Usuario extends Pessoa {
         this.viagens = viagens != null ? viagens : new ArrayList<>();
     }
 
-    public Usuario(int id, String nome, String cpf, String email, String senha, List<Viagem> viagens) {
-        super(id, nome, cpf, email, senha);
-        this.viagens = viagens != null ? viagens : new ArrayList<>();
-    }
+    //public Usuario(int id, String nome, String cpf, String email, String senha, List<Viagem> viagens) {
+      //  super(id, nome, cpf, email, senha);
+      //  this.viagens = viagens != null ? viagens : new ArrayList<>();
+   // }
 
     public List<Viagem> getViagens() {
         return viagens;

@@ -8,7 +8,11 @@ import org.example.entitiesfinal.Trajeto;
 import org.example.repositories.PessoaRepo;
 import org.example.repositories.TrajetoRepository;
 import org.example.services.DistanciaService;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Path("/trajetos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -27,9 +31,9 @@ public class TrajetoResource {
     public Response registrarTrajeto(Trajeto trajeto) {
         try {
             // Validações
-            if (trajeto.getPessoa() == null || trajeto.getPessoa().getId() == 0) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'pessoa' e seu 'id' são obrigatórios.").build();
-            }
+            //if (trajeto.getPessoa() == null || trajeto.getPessoa().getId() == 0) {
+             //   return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'pessoa' e seu 'id' são obrigatórios.").build();
+            //}
             if (trajeto.getOrigem() == null || trajeto.getOrigem().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'origem' é obrigatório.").build();
             }
@@ -41,7 +45,6 @@ public class TrajetoResource {
             }
 
 
-            // Chamada ao serviço com todos os parâmetros
             distanciaService.registrarTrajeto(
                     trajeto.getPessoa().getId(),
                     trajeto.getOrigem(),
@@ -89,18 +92,21 @@ public class TrajetoResource {
         try {
             Pessoa pessoa = pessoaRepo.getPessoaById(pessoaId);
             if (pessoa != null) {
-                int pontos = pessoa.getPontos();
-                int creditos = pessoa.getCreditos();
-                double distanciaAcumulada = pessoa.getDistanciaAcumulada();
-                return Response.ok("Pontuação: " + pontos + ", Créditos: " + creditos + ", Distância acumulada: " + distanciaAcumulada + " km").build();
+                Map<String, Object> dadosUsuario = new HashMap<>();
+                dadosUsuario.put("pontos", pessoa.getPontos());
+                dadosUsuario.put("creditos", pessoa.getCreditos());
+                dadosUsuario.put("distanciaAcumulada", pessoa.getDistanciaAcumulada());
+                return Response.ok(dadosUsuario).build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND).entity("Pessoa não encontrada.").build();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao consultar pontuação e créditos: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao consultar pontuação e créditos: " + e.getMessage()).build();
         }
     }
+
 
 
     @GET

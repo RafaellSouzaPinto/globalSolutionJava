@@ -2,6 +2,7 @@ package org.example.entitiesfinal;
 
 
 public class Pessoa {
+    private String planos;
     private int id;
     private String nome;
     private String cpf;
@@ -14,12 +15,13 @@ public class Pessoa {
 
     public Pessoa() {}
 
-    public Pessoa(int id, String nome, String cpf, String email, String senha) {
+    public Pessoa(int id, String nome, String cpf, String email, String senha, String planos) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
+        this.planos = planos;
     }
 
     public int getId() {
@@ -83,5 +85,13 @@ public class Pessoa {
 
     public void setDistanciaAcumulada(double distanciaAcumulada) {
         this.distanciaAcumulada = distanciaAcumulada;
+    }
+
+    public String getPlanos() {
+        return planos;
+    }
+
+    public void setPlanos(String planos) {
+        this.planos = planos;
     }
 }

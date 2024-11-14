@@ -34,6 +34,9 @@ public class PessoaResource {
             if (!pessoaService.validarSenha(pessoa.getSenha())) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Senha deve ter no mínimo 8 caracteres.").build();
             }
+            if (pessoa.getPlanos() == null || pessoa.getPlanos().isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Plano é obrigatório.").build();
+            }
 
             // Verificação de duplicidade de CPF e Email
             if (pessoaService.cpfOuEmailExistem(pessoa)) {
@@ -50,6 +53,7 @@ public class PessoaResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro no banco de dados: " + e.getMessage()).build();
         }
     }
+
 
 
     // 2. Login

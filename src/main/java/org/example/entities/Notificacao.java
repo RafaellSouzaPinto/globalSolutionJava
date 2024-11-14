@@ -17,8 +17,7 @@ public class Notificacao {
         this.usuario = usuario;
         this.mensagem = mensagem;
         this.lida = false;
-        this.dataHora = dataHora;
-    }
+        this.dataHora = dataHora;    }
 
     public int getId() {
         return id;

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PessoaRepo {
     public boolean cadastrarPessoa(Pessoa pessoa) throws SQLException {
-        String sql = "INSERT INTO pessoas (nome, cpf, email, senha) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO pessoas (nome, cpf, email, senha, planos) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -21,11 +21,13 @@ public class PessoaRepo {
             stmt.setString(2, pessoa.getCpf());
             stmt.setString(3, pessoa.getEmail());
             stmt.setString(4, pessoa.getSenha());
+            stmt.setString(5, pessoa.getPlanos());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         }
     }
+
 
 
     public Pessoa login(String email, String senha) throws SQLException {
@@ -131,7 +133,7 @@ public class PessoaRepo {
         }
     }
     public Pessoa getPessoaById(int id) {
-        String sql = "SELECT id, nome, cpf, senha, email, pontos, creditos, distancia_acumulada FROM pessoas WHERE id = ?";
+        String sql = "SELECT id, nome, cpf, senha, email, pontos, creditos, distancia_acumulada, planos FROM pessoas WHERE id = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -147,8 +149,8 @@ public class PessoaRepo {
                 pessoa.setEmail(rs.getString("email"));
                 pessoa.setPontos(rs.getInt("pontos"));
                 pessoa.setCreditos(rs.getInt("creditos"));
-                pessoa.setDistanciaAcumulada(rs.getDouble("distancia_acumulada")); // Set the accumulated distance
-
+                pessoa.setDistanciaAcumulada(rs.getDouble("distancia_acumulada"));
+                pessoa.setPlanos(rs.getString("planos")); // Definindo o campo "planos"
                 return pessoa;
             } else {
                 return null;
@@ -172,12 +174,13 @@ public class PessoaRepo {
                 pessoa.setNome(rs.getString("nome"));
                 pessoa.setCpf(rs.getString("cpf"));
                 pessoa.setEmail(rs.getString("email"));
-                // Não defina a senha para segurança
+                pessoa.setPlanos(rs.getString("planos")); // Definindo o campo "planos"
                 pessoas.add(pessoa);
             }
         }
         return pessoas;
     }
+
 
 
 
