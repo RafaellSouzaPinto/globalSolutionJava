@@ -3,7 +3,7 @@ package org.example.entitiesfinal;
 public class Trajeto {
     private int id;
     private Pessoa pessoa;
-    private MeioDeTransporte meioDeTransporte;
+    private String meioDeTransporte;
     private double distanciaKm;
     private int pontos;
     private String origem;
@@ -11,7 +11,7 @@ public class Trajeto {
 
     public Trajeto() {}
 
-    public Trajeto(int id, Pessoa pessoa, MeioDeTransporte meioDeTransporte, double distanciaKm, int pontos, String origem, String destino) {
+    public Trajeto(int id, Pessoa pessoa, String meioDeTransporte, double distanciaKm, int pontos, String origem, String destino) {
         this.id = id;
         this.pessoa = pessoa;
         this.meioDeTransporte = meioDeTransporte;
@@ -37,11 +37,11 @@ public class Trajeto {
         this.pessoa = pessoa;
     }
 
-    public MeioDeTransporte getMeioDeTransporte() {
+    public String getMeioDeTransporte() {
         return meioDeTransporte;
     }
 
-    public void setMeioDeTransporte(MeioDeTransporte meioDeTransporte) {
+    public void setMeioDeTransporte(String meioDeTransporte) {
         this.meioDeTransporte = meioDeTransporte;
     }
 

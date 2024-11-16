@@ -30,10 +30,6 @@ public class TrajetoResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registrarTrajeto(Trajeto trajeto) {
         try {
-            // Validações
-            //if (trajeto.getPessoa() == null || trajeto.getPessoa().getId() == 0) {
-             //   return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'pessoa' e seu 'id' são obrigatórios.").build();
-            //}
             if (trajeto.getOrigem() == null || trajeto.getOrigem().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'origem' é obrigatório.").build();
             }
@@ -44,21 +40,29 @@ public class TrajetoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'meioDeTransporte' é obrigatório.").build();
             }
 
-
-            distanciaService.registrarTrajeto(
+            // Chama o serviço e obtém o trajeto com dados atualizados
+            Trajeto trajetoRegistrado = distanciaService.registrarTrajeto(
                     trajeto.getPessoa().getId(),
                     trajeto.getOrigem(),
                     trajeto.getDestino(),
                     trajeto.getMeioDeTransporte()
             );
 
+            // Cria a resposta com os dados calculados
+            Map<String, Object> response = new HashMap<>();
+            response.put("mensagem", "Trajeto registrado com sucesso!");
+            response.put("distanciaKm", trajetoRegistrado.getDistanciaKm());
+            response.put("pontosGanhos", trajetoRegistrado.getPontos());
 
-            return Response.status(Response.Status.CREATED).entity("Trajeto registrado com sucesso!").build();
+            return Response.status(Response.Status.CREATED).entity(response).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao registrar trajeto: " + e.getMessage()).build();
         }
     }
+
+
+
 
     @GET
     @Path("/{id}")
@@ -83,9 +87,11 @@ public class TrajetoResource {
             return Response.ok(trajetos).build();
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao buscar trajetos: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar trajetos: " + e.getMessage()).build();
         }
     }
+
     @GET
     @Path("/usuario/{pessoaId}/total")
     public Response consultarPontosECreditos(@PathParam("pessoaId") int pessoaId) {

@@ -105,6 +105,20 @@
             <version>20210307</version>
         </dependency>
 
+            <!-- Dependência do Spring Web -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.3.10</version> <!-- Verifique a versão desejada -->
+        </dependency>
+
+            <!-- Dependência do Spring Web MVC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.3.10</version> <!-- Verifique a versão desejada -->
+        </dependency>
+
 
     </dependencies>
 

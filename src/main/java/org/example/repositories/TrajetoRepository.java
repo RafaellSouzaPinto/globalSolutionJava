@@ -37,7 +37,7 @@ public class TrajetoRepository {
             stmt.setString(3, trajeto.getDestino());
             stmt.setDouble(4, trajeto.getDistanciaKm());
             stmt.setInt(5, trajeto.getPontos());
-            stmt.setString(6, trajeto.getMeioDeTransporte().toString());
+            stmt.setString(6, trajeto.getMeioDeTransporte());
 
             stmt.executeUpdate();
         }
@@ -58,7 +58,7 @@ public class TrajetoRepository {
                 trajeto.setId(rs.getInt("id"));
                 trajeto.setDistanciaKm(rs.getDouble("distancia_km"));
                 trajeto.setPontos(rs.getInt("pontos"));
-                trajeto.setMeioDeTransporte(MeioDeTransporte.valueOf(rs.getString("meio_de_transporte")));
+                trajeto.setMeioDeTransporte(rs.getString("meio_de_transporte"));
                 return trajeto;
             }
         }
@@ -120,7 +120,7 @@ public class TrajetoRepository {
                 trajeto.setId(rs.getInt("id"));
                 trajeto.setDistanciaKm(rs.getDouble("distancia_km"));
                 trajeto.setPontos(rs.getInt("pontos"));
-                trajeto.setMeioDeTransporte(MeioDeTransporte.valueOf(rs.getString("meio_de_transporte")));
+                trajeto.setMeioDeTransporte(rs.getString("meio_de_transporte"));
 
                 trajetos.add(trajeto);
             }
@@ -142,13 +142,16 @@ public class TrajetoRepository {
                 trajeto.setId(rs.getInt("id"));
                 trajeto.setDistanciaKm(rs.getDouble("distancia_km"));
                 trajeto.setPontos(rs.getInt("pontos"));
-                trajeto.setMeioDeTransporte(MeioDeTransporte.valueOf(rs.getString("meio_de_transporte")));
+                trajeto.setMeioDeTransporte(rs.getString("meio_de_transporte"));
+                trajeto.setOrigem(rs.getString("origem"));  // Adiciona origem
+                trajeto.setDestino(rs.getString("destino")); // Adiciona destino
 
                 trajetos.add(trajeto);
             }
         }
         return trajetos;
     }
+
     public int getTotalPontosByPessoaId(int pessoaId) {
         String sql = "SELECT SUM(pontos) FROM trajetos WHERE pessoa_id = ?";
         try (Connection conn = ConnectionFactory.getConnection();

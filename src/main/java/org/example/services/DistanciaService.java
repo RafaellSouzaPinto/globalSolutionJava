@@ -74,35 +74,40 @@ public class DistanciaService {
         return earthRadius * c;
     }
 
-    // DistanciaService.java
 
-    public void registrarTrajeto(int pessoaId, String origem, String destino, MeioDeTransporte meioDeTransporte) throws Exception {
+    public Trajeto registrarTrajeto(int pessoaId, String origem, String destino, String meioDeTransporte) throws Exception {
         Pessoa pessoa = pessoaRepo.getPessoaById(pessoaId);
         if (pessoa == null) {
             throw new Exception("Pessoa com ID " + pessoaId + " não encontrada.");
         }
 
+        // Obter coordenadas de origem e destino
         double[] origemCoord = geocodeAddress(origem);
         double[] destinoCoord = geocodeAddress(destino);
+
+        // Calcular a distância em quilômetros
         double distanciaKm = calculateDistance(origemCoord, destinoCoord);
+        System.out.println("Distância calculada: " + distanciaKm + " km");  // Debug
 
         Trajeto trajeto = new Trajeto();
         trajeto.setPessoa(pessoa);
         trajeto.setOrigem(origem);
         trajeto.setDestino(destino);
-        trajeto.setDistanciaKm(distanciaKm);
+        trajeto.setDistanciaKm(distanciaKm); // Definindo a distância no trajeto
         trajeto.setMeioDeTransporte(meioDeTransporte);
 
-        // Calcula os pontos considerando o plano
+        // Calcula os pontos com base no plano
         int pontosBase = (int) Math.floor(distanciaKm);
         if ("Plano Super Verdí".equalsIgnoreCase(pessoa.getPlanos())) {
             trajeto.setPontos((int) Math.floor(pontosBase * 1.5));
         } else {
             trajeto.setPontos(pontosBase);
         }
+        System.out.println("Pontos calculados: " + trajeto.getPontos()); // Debug
 
         trajetoRepository.salvar(trajeto);
 
+        // Atualizar dados da pessoa
         double distanciaAcumulada = trajetoRepository.getTotalDistanciaByPessoaId(pessoaId);
         pessoa.setDistanciaAcumulada(distanciaAcumulada);
 
@@ -123,7 +128,10 @@ public class DistanciaService {
         }
 
         System.out.println("Trajeto registrado com sucesso! Pontos acumulados: " + pontosTotais);
+
+        return trajeto; // Retorna o trajeto com distância e pontos calculados
     }
+
 
 }
 

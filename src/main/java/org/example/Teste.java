@@ -26,7 +26,7 @@ public class Teste {
             for (int i = 0; i < 3; i++) {
                 String origem = "Rua Otília, 596, Vila Esperança, São Paulo, SP";
                 String destino = "Rua mandu, São Paulo";
-                MeioDeTransporte meioDeTransporte = MeioDeTransporte.BICICLETA_ELETRICA;
+                String meioDeTransporte = "teste";
 
 
                 distanciaService.registrarTrajeto(pessoaLogada.getId(), origem, destino, meioDeTransporte);
