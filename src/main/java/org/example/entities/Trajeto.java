@@ -76,4 +76,24 @@ public class Trajeto {
     public void setDestino(String destino) {
         this.destino = destino;
     }
+    @Override
+    public String toString() {
+        return "Trajeto {" +
+                "ID=" + id +
+                ", Pessoa=" + pessoa.getNome() +
+                ", Meio de Transporte='" + meioDeTransporte + '\'' +
+                ", Distância=" + distanciaKm + " km" +
+                ", Pontos=" + pontos +
+                ", Origem='" + origem + '\'' +
+                ", Destino='" + destino + '\'' +
+                '}';
+    }
+    public void alterarMeioDeTransporte(String novoMeioDeTransporte) {
+        if (novoMeioDeTransporte != null && !novoMeioDeTransporte.trim().isEmpty()) {
+            this.meioDeTransporte = novoMeioDeTransporte;
+        }
+    }
+
+
+
 }

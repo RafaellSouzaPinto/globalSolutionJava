@@ -28,4 +28,23 @@ public class MeioTransporte {
     public void setNome(String nome) {
         this.nome = nome;
     }
+    @Override
+    public String toString() {
+        return "MeioTransporte {" +
+                "ID=" + id +
+                ", Nome='" + nome + '\'' +
+                '}';
+    }
+    public String gerarCodigoIdentificador() {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalStateException("Nome do meio de transporte não pode estar vazio para gerar o identificador.");
+        }
+        String slug = nome.trim()
+                .toLowerCase()
+                .replaceAll("[^a-z0-9]+", "-")
+                .replaceAll("^-|-$", "");
+        return slug + "-" + id;
+    }
+
+
 }

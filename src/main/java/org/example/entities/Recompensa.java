@@ -47,4 +47,20 @@ public class Recompensa {
     public void setId(int id) {
         this.id = id;
     }
+    public void reduzirPontosNecessarios(int quantidade) {
+        if (quantidade > 0 && quantidade <= this.pontosNecessarios) {
+            this.pontosNecessarios -= quantidade;
+        }
+    }
+    @Override
+    public String toString() {
+        return "Recompensa {" +
+                "ID=" + id +
+                ", Nome='" + nome + '\'' +
+                ", Descrição='" + descricao + '\'' +
+                ", Pontos Necessários=" + pontosNecessarios +
+                '}';
+    }
+
+
 }

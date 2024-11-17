@@ -94,4 +94,20 @@ public class Pessoa {
     public void setPlanos(String planos) {
         this.planos = planos;
     }
+    public String exibirResumo() {
+        return "Pessoa {" +
+                "ID=" + id +
+                ", Nome='" + nome + '\'' +
+                ", Plano='" + planos + '\'' +
+                ", Pontos=" + pontos +
+                ", Créditos=" + creditos +
+                ", Distância Acumulada=" + distanciaAcumulada + " km" +
+                '}';
+    }
+    public void reiniciarPontosECreditos() {
+        this.pontos = 0;
+        this.creditos = 0;
+    }
+
+
 }

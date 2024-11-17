@@ -49,4 +49,26 @@ public class Feedback {
     public void setDataHora(LocalDateTime dataHora) {
         this.dataHora = dataHora;
     }
+    @Override
+    public String toString() {
+        return "Feedback{" +
+                "id=" + id +
+                ", usuario=" + (usuario != null ? usuario.getNome() : "null") +
+                ", mensagem='" + mensagem + '\'' +
+                ", dataHora=" + dataHora +
+                '}';
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Feedback feedback = (Feedback) obj;
+        return id == feedback.id;
+    }
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
+
+
 }

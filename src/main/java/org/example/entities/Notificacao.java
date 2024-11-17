@@ -59,4 +59,26 @@ public class Notificacao {
     public void setDataHora(LocalDateTime dataHora) {
         this.dataHora = dataHora;
     }
+    public void marcarComoLida() {
+        if (!this.lida) {
+            this.lida = true;
+            this.dataHora = LocalDateTime.now();
+        }
+    }
+    public String exibirResumo() {
+        return "Notificação {" +
+                "ID=" + id +
+                ", Usuário=" + usuario.getNome() +
+                ", Mensagem='" + mensagem + '\'' +
+                ", Lida=" + (lida ? "Sim" : "Não") +
+                ", Data e Hora=" + dataHora +
+                '}';
+    }
+    public void enviarMensagemPadrao(String nomeEvento) {
+        this.mensagem = "Olá " + usuario.getNome() + ", você tem uma nova atualização sobre " + nomeEvento + "!";
+        this.dataHora = LocalDateTime.now(); // Define o horário em que a mensagem foi enviada
+        this.lida = false; // Define como não lida por padrão
+    }
+
+
 }

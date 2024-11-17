@@ -50,4 +50,21 @@ public class Plano {
     public void setBeneficios(String beneficios) {
         this.beneficios = beneficios;
     }
+    @Override
+    public String toString() {
+        return "Plano {" +
+                "ID=" + id +
+                ", Nome='" + nome + '\'' +
+                ", Preço=" + preco +
+                ", Benefícios='" + beneficios + '\'' +
+                '}';
+    }
+    public void aplicarDesconto(BigDecimal percentualDesconto) {
+        if (percentualDesconto.compareTo(BigDecimal.ZERO) > 0 && percentualDesconto.compareTo(new BigDecimal("100")) < 0) {
+            BigDecimal desconto = preco.multiply(percentualDesconto).divide(new BigDecimal("100"));
+            this.preco = preco.subtract(desconto);
+        }
+    }
+
+
 }

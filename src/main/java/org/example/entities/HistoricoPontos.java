@@ -59,4 +59,23 @@ public class HistoricoPontos {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+    public void registrarPontos(Pessoa usuario, int pontos, String descricao) {
+        this.usuario = usuario;
+        this.pontos = pontos;
+        this.descricao = descricao;
+        this.dataHora = LocalDateTime.now();
+    }
+    @Override
+    public String toString() {
+        return "Histórico de Pontos {" +
+                "ID=" + id +
+                ", Usuário=" + usuario.getNome() +
+                ", Data e Hora=" + dataHora +
+                ", Pontos=" + pontos +
+                ", Descrição='" + descricao + '\'' +
+                '}';
+    }
+
+
+
 }
