@@ -2,11 +2,10 @@ package org.example.resource;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.example.entitiesfinal.MeioDeTransporte;
-import org.example.entitiesfinal.Pessoa;
-import org.example.entitiesfinal.Trajeto;
+import org.example.entities.Pessoa;
+import org.example.entities.Trajeto;
 import org.example.repositories.PessoaRepo;
-import org.example.repositories.TrajetoRepository;
+import org.example.repositories.TrajetoRepo;
 import org.example.services.DistanciaService;
 
 import java.util.HashMap;
@@ -17,11 +16,11 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class TrajetoResource {
-    private final TrajetoRepository trajetoRepository;
+    private final TrajetoRepo trajetoRepository;
     private final PessoaRepo pessoaRepo;
     private final DistanciaService distanciaService;
     public TrajetoResource() {
-        this.trajetoRepository = new TrajetoRepository();
+        this.trajetoRepository = new TrajetoRepo();
         this.pessoaRepo = new PessoaRepo();
         this.distanciaService = new DistanciaService(trajetoRepository, pessoaRepo);
     }

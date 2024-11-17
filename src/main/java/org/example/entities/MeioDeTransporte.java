@@ -1,4 +1,4 @@
-package org.example.entitiesfinal;
+package org.example.entities;
 
 public enum MeioDeTransporte {
     A_PE,

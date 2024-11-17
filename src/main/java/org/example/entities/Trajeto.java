@@ -1,4 +1,4 @@
-package org.example.entitiesfinal;
+package org.example.entities;
 
 public class Trajeto {
     private int id;

@@ -1,10 +1,9 @@
 package org.example.services;
 
-import org.example.entitiesfinal.Trajeto;
-import org.example.entitiesfinal.MeioDeTransporte;
-import org.example.entitiesfinal.Pessoa;
+import org.example.entities.Trajeto;
+import org.example.entities.Pessoa;
 import org.example.infrastructure.ConnectionFactory;
-import org.example.repositories.TrajetoRepository;
+import org.example.repositories.TrajetoRepo;
 import org.example.repositories.PessoaRepo;
 
 import java.io.BufferedReader;
@@ -22,10 +21,10 @@ public class DistanciaService {
 
     private static final String API_KEY = "AIzaSyD8vtpJx01z5ffBFHBhZMbgqUeYqtMZKH4";
     private static final int PONTOS_PARA_CREDITO = 4200;
-    private final TrajetoRepository trajetoRepository;
+    private final TrajetoRepo trajetoRepository;
     private final PessoaRepo pessoaRepo;
 
-    public DistanciaService(TrajetoRepository trajetoRepository, PessoaRepo pessoaRepo) {
+    public DistanciaService(TrajetoRepo trajetoRepository, PessoaRepo pessoaRepo) {
         this.trajetoRepository = trajetoRepository;
         this.pessoaRepo = pessoaRepo;
     }

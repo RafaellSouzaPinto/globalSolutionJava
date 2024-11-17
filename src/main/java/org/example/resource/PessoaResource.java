@@ -3,7 +3,7 @@ package org.example.resource;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.example.entitiesfinal.Pessoa;
+import org.example.entities.Pessoa;
 import org.example.repositories.PessoaRepo;
 import org.example.services.PessoaService;
 

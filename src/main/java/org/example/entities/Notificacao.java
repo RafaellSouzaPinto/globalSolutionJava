@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Notificacao {
     private int id;
-    private Usuario usuario;
+    private Pessoa usuario;
     private String mensagem;
     private boolean lida;
     private LocalDateTime dataHora;
@@ -12,12 +12,13 @@ public class Notificacao {
     public Notificacao() {
     }
 
-    public Notificacao(int id, Usuario usuario, String mensagem, boolean lida, LocalDateTime dataHora) {
+    public Notificacao(int id, Pessoa usuario, String mensagem, boolean lida, LocalDateTime dataHora) {
         this.id = id;
         this.usuario = usuario;
         this.mensagem = mensagem;
-        this.lida = false;
-        this.dataHora = dataHora;    }
+        this.lida = lida;
+        this.dataHora = dataHora;
+    }
 
     public int getId() {
         return id;
@@ -27,11 +28,11 @@ public class Notificacao {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
+    public Pessoa getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Pessoa usuario) {
         this.usuario = usuario;
     }
 
@@ -57,9 +58,5 @@ public class Notificacao {
 
     public void setDataHora(LocalDateTime dataHora) {
         this.dataHora = dataHora;
-    }
-    // Método para marcar como lida
-    public void marcarComoLida() {
-        this.lida = true;
     }
 }

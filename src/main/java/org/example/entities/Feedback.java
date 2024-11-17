@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 
 public class Feedback {
     private int id;
-    private Usuario usuario;
+    private Pessoa usuario;
     private String mensagem;
     private LocalDateTime dataHora;
 
     public Feedback() {
     }
 
-    public Feedback(int id, Usuario usuario, String mensagem, LocalDateTime dataHora) {
+    public Feedback(int id, Pessoa usuario, String mensagem, LocalDateTime dataHora) {
         this.id = id;
         this.usuario = usuario;
         this.mensagem = mensagem;
@@ -26,11 +26,11 @@ public class Feedback {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
+    public Pessoa getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Pessoa usuario) {
         this.usuario = usuario;
     }
 

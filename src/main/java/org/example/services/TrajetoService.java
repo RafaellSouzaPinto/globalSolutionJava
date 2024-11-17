@@ -1,6 +1,6 @@
 package org.example.services;
 
-import org.example.entitiesfinal.Trajeto;
+import org.example.entities.Trajeto;
 
 public class TrajetoService {
 

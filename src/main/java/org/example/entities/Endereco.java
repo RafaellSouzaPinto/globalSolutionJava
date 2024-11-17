@@ -1,7 +1,5 @@
 package org.example.entities;
 
-import org.example.entitiesfinal.Pessoa;
-
 public class Endereco {
 
     private int id;

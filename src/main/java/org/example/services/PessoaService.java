@@ -1,6 +1,6 @@
 package org.example.services;
 
-import org.example.entitiesfinal.Pessoa;
+import org.example.entities.Pessoa;
 import org.example.repositories.PessoaRepo;
 
 public class PessoaService {
