@@ -59,6 +59,18 @@ public class TrajetoResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao registrar trajeto: " + e.getMessage()).build();
         }
     }
+    @GET
+    @Path("/usuario/{pessoaId}")
+    public Response buscarTrajetosPorPessoaId(@PathParam("pessoaId") int pessoaId) {
+        try {
+            List<Trajeto> trajetos = trajetoRepository.buscarPorPessoaId(pessoaId);
+            return Response.ok(trajetos).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar trajetos: " + e.getMessage()).build();
+        }
+    }
 
 
 
