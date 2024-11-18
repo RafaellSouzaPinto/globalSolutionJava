@@ -10,6 +10,8 @@ import org.example.services.PessoaService;
 import java.util.List;
 import java.util.Map;
 
+
+
 @Path("/pessoas")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -79,30 +81,42 @@ public class PessoaResource {
     // 3. Alteração de Senha
     @PUT
     @Path("/{id}/alterarSenha")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response alterarSenha(
-            @PathParam("id") int id,
-            @FormParam("senhaAtual") String senhaAtual,
-            @FormParam("novaSenha") String novaSenha,
-            @FormParam("confirmacaoNovaSenha") String confirmacaoNovaSenha) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response alterarSenha(@PathParam("id") int id, Map<String, String> body) {
         try {
+            // Extrair as senhas do JSON
+            String senhaAtual = body.get("senhaAtual");
+            String novaSenha = body.get("novaSenha");
+            String confirmacaoNovaSenha = body.get("confirmacaoNovaSenha");
+
+            // Validar nova senha
             if (novaSenha == null || novaSenha.length() < 8) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("A nova senha deve ter no mínimo 8 caracteres.").build();
-            }
-            if (!novaSenha.equals(confirmacaoNovaSenha)) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("A nova senha e a confirmação não coincidem.").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("A nova senha deve ter no mínimo 8 caracteres.").build();
             }
 
+            // Validar confirmação de senha
+            if (!novaSenha.equals(confirmacaoNovaSenha)) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("A nova senha e a confirmação não coincidem.").build();
+            }
+
+            // Alterar senha no repositório
             boolean sucesso = pessoaRepo.alterarSenha(id, senhaAtual, novaSenha);
             if (sucesso) {
                 return Response.ok("Senha alterada com sucesso.").build();
             } else {
-                return Response.status(Response.Status.UNAUTHORIZED).entity("Senha atual incorreta ou usuário não encontrado.").build();
+                return Response.status(Response.Status.UNAUTHORIZED)
+                        .entity("").build();
             }
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro no banco de dados: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro no banco de dados: " + e.getMessage()).build();
         }
     }
+
+
 
     // 4. Exclusão de Conta
     @DELETE
@@ -120,34 +134,29 @@ public class PessoaResource {
         }
     }
 
-    // 5. Obter Pessoa por ID
+
+
     @GET
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getPessoaById(@PathParam("id") int id) {
         try {
             Pessoa pessoa = pessoaRepo.getPessoaById(id);
             if (pessoa != null) {
                 return Response.ok(pessoa).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).entity("Usuário não encontrado.").build();
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Usuário não encontrado.")
+                        .build();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro no banco de dados: " + e.getMessage()).build();
+                    .entity("Erro no banco de dados: " + e.getMessage())
+                    .build();
         }
     }
 
-    // 6. Listar todas as Pessoas
-    @GET
-    public Response getAllPessoas() {
-        try {
-            List<Pessoa> pessoas = pessoaRepo.getAllPessoas();
-            return Response.ok(pessoas).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro no banco de dados: " + e.getMessage()).build();
-        }
-    }
     @PUT
     @Path("/{id}/trocarPlano")
     @Consumes(MediaType.APPLICATION_JSON)

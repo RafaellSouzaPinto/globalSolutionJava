@@ -85,7 +85,10 @@ public class PessoaRepo {
 
 
     public boolean alterarSenha(int pessoaId, String senhaAtual, String novaSenha) throws SQLException {
-        logger.info("Tentando alterar senha para o ID da pessoa: " + pessoaId);
+        System.out.println("Pessoa ID Recebida: " + pessoaId);
+        System.out.println("Senha Atual Recebida para Verificação: [" + senhaAtual + "]");
+        System.out.println("Nova Senha Recebida para Atualização: [" + novaSenha + "]");
+
         String sqlSelect = "SELECT senha FROM pessoas WHERE id = ?";
         String sqlUpdate = "UPDATE pessoas SET senha = ? WHERE id = ?";
 
@@ -98,33 +101,31 @@ public class PessoaRepo {
 
             if (rs.next()) {
                 String senhaBanco = rs.getString("senha");
+                System.out.println("Senha Atual no Banco: [" + senhaBanco + "]");
 
-                if (senhaBanco.equals(senhaAtual)) {
-                    if (novaSenha.length() >= 8) {
-                        stmtUpdate.setString(1, novaSenha);
-                        stmtUpdate.setInt(2, pessoaId);
+                if (senhaBanco.trim().equals(senhaAtual.trim())) {
+                    stmtUpdate.setString(1, novaSenha);
+                    stmtUpdate.setInt(2, pessoaId);
 
-                        int rowsAffected = stmtUpdate.executeUpdate();
-                        logger.info("Senha alterada com sucesso para o ID da pessoa: " + pessoaId);
-                        return rowsAffected > 0;
-                    } else {
-                        String errorMessage = "A nova senha deve ter no mínimo 8 caracteres.";
-                        logger.warn(errorMessage);
-                        throw new IllegalArgumentException(errorMessage);
-                    }
+                    int rowsAffected = stmtUpdate.executeUpdate();
+                    System.out.println("Linhas Afetadas na Atualização: " + rowsAffected);
+                    return rowsAffected > 0;
                 } else {
-                    logger.warn("Senha atual incorreta para o ID da pessoa: " + pessoaId);
+                    System.out.println("Senha Atual NÃO corresponde à do banco.");
                     return false;
                 }
             } else {
-                logger.warn("Pessoa não encontrada para o ID: " + pessoaId);
+                System.out.println("Nenhum usuário encontrado com o ID: " + pessoaId);
                 return false;
             }
         } catch (SQLException e) {
-            logger.error("Erro ao alterar senha para o ID da pessoa: " + pessoaId, e);
+            System.out.println("Erro ao executar operação no banco de dados: " + e.getMessage());
             throw e;
         }
     }
+
+
+
 
 
     public boolean excluirConta(int pessoaId) throws SQLException {
@@ -193,8 +194,12 @@ public class PessoaRepo {
                 pessoa.setCreditos(rs.getInt("creditos"));
                 pessoa.setDistanciaAcumulada(rs.getDouble("distancia_acumulada"));
                 pessoa.setPlanos(rs.getString("planos")); // Definindo o campo "planos"
+
+                // Log para verificar os valores
+                System.out.println("Pessoa encontrada: " + pessoa);
                 return pessoa;
             } else {
+                System.out.println("Pessoa não encontrada com ID: " + id);
                 return null;
             }
         } catch (Exception e) {
@@ -202,6 +207,7 @@ public class PessoaRepo {
             return null;
         }
     }
+
 
     public List<Pessoa> getAllPessoas() throws SQLException {
         String sql = "SELECT * FROM pessoas";
