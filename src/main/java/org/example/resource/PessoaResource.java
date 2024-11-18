@@ -88,18 +88,11 @@ public class PessoaResource {
             // Extrair as senhas do JSON
             String senhaAtual = body.get("senhaAtual");
             String novaSenha = body.get("novaSenha");
-            String confirmacaoNovaSenha = body.get("confirmacaoNovaSenha");
 
             // Validar nova senha
             if (novaSenha == null || novaSenha.length() < 8) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("A nova senha deve ter no mínimo 8 caracteres.").build();
-            }
-
-            // Validar confirmação de senha
-            if (!novaSenha.equals(confirmacaoNovaSenha)) {
-                return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("A nova senha e a confirmação não coincidem.").build();
             }
 
             // Alterar senha no repositório
@@ -108,13 +101,14 @@ public class PessoaResource {
                 return Response.ok("Senha alterada com sucesso.").build();
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("").build();
+                        .entity("Senha atual incorreta ou usuário não encontrado.").build();
             }
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Erro no banco de dados: " + e.getMessage()).build();
         }
     }
+
 
 
 
