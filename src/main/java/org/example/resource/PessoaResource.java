@@ -8,6 +8,7 @@ import org.example.repositories.PessoaRepo;
 import org.example.services.PessoaService;
 
 import java.util.List;
+import java.util.Map;
 
 @Path("/pessoas")
 @Produces(MediaType.APPLICATION_JSON)
@@ -147,5 +148,55 @@ public class PessoaResource {
                     .entity("Erro no banco de dados: " + e.getMessage()).build();
         }
     }
+    @PUT
+    @Path("/{id}/trocarPlano")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response trocarPlano(@PathParam("id") int id, Map<String, String> body) {
+        try {
+            // Extrair o novo plano do corpo da requisição
+            String novoPlano = body.get("novoPlano");
+
+            // Validar o novo plano
+            if (novoPlano == null ||
+                    (!"Plano Verdí".equalsIgnoreCase(novoPlano) && !"Plano Super Verdí".equalsIgnoreCase(novoPlano))) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Plano inválido. Escolha entre 'Plano Verdí' e 'Plano Super Verdí'.")
+                        .build();
+            }
+
+            // Buscar o usuário pelo ID
+            Pessoa pessoa = pessoaRepo.getPessoaById(id);
+            if (pessoa == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Usuário não encontrado.")
+                        .build();
+            }
+
+            // Verificar se o usuário já está no plano solicitado
+            if (pessoa.getPlanos().equalsIgnoreCase(novoPlano)) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("O usuário já está no plano escolhido.")
+                        .build();
+            }
+
+            // Atualizar o plano no banco de dados
+            boolean sucesso = pessoaRepo.trocarPlano(id, novoPlano);
+            if (sucesso) {
+                return Response.ok("Plano alterado com sucesso para: " + novoPlano).build();
+            } else {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity("Erro ao alterar o plano.")
+                        .build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro no banco de dados: " + e.getMessage())
+                    .build();
+        }
+    }
+
+
+
 }
 

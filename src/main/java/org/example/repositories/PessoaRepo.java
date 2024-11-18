@@ -66,6 +66,23 @@ public class PessoaRepo {
             throw e;
         }
     }
+    public boolean trocarPlano(int pessoaId, String novoPlano) throws SQLException {
+        String sql = "UPDATE pessoas SET planos = ? WHERE id = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, novoPlano);
+            stmt.setInt(2, pessoaId);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            logger.error("Erro ao trocar plano para o ID da pessoa: " + pessoaId, e);
+            throw e;
+        }
+    }
+
+
 
     public boolean alterarSenha(int pessoaId, String senhaAtual, String novaSenha) throws SQLException {
         logger.info("Tentando alterar senha para o ID da pessoa: " + pessoaId);
