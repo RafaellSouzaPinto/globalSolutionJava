@@ -210,7 +210,7 @@ public class PessoaRepo {
 
 
     public List<Pessoa> getAllPessoas() throws SQLException {
-        String sql = "SELECT * FROM pessoas";
+        String sql = "SELECT id, nome, cpf, email FROM pessoas"; // Seleciona apenas os campos desejados
         List<Pessoa> pessoas = new ArrayList<>();
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -222,12 +222,12 @@ public class PessoaRepo {
                 pessoa.setNome(rs.getString("nome"));
                 pessoa.setCpf(rs.getString("cpf"));
                 pessoa.setEmail(rs.getString("email"));
-                pessoa.setPlanos(rs.getString("planos"));
                 pessoas.add(pessoa);
             }
         }
         return pessoas;
     }
+
 
 
 

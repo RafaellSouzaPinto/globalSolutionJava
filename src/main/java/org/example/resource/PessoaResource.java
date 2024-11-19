@@ -198,8 +198,16 @@ public class PessoaResource {
                     .build();
         }
     }
-
-
+    @GET
+    @Path("/todas")
+    public Response getAllPessoas() {
+        try {
+            List<Pessoa> pessoas = pessoaRepo.getAllPessoas();
+            return Response.ok(pessoas).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro no banco de dados: " + e.getMessage()).build();
+        }
+    }
 
 }
 
