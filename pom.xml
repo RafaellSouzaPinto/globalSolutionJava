@@ -22,7 +22,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- Suas dependências existentes -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-grizzly2-http</artifactId>
@@ -51,6 +50,8 @@
             <artifactId>log4j-core</artifactId>
             <version>2.24.1</version>
         </dependency>
+
+        <!-- Adicionando as dependências do Hibernate e JPA -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -62,45 +63,77 @@
             <version>3.0.0</version>
         </dependency>
         <dependency>
+            <groupId>mysql</groupId> <!-- Use este se você estiver usando MySQL -->
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.30</version>
+        </dependency>
+        <!-- Descomente abaixo se estiver usando PostgreSQL -->
+        <!--
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.3</version>
+        </dependency>
+        -->
+        <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>3.1.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.9</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
             <version>5.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
+
+            <!-- Dependência do Spring Web -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.3.10</version> <!-- Verifique a versão desejada -->
+        </dependency>
+
+            <!-- Dependência do Spring Web MVC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.3.10</version> <!-- Verifique a versão desejada -->
+        </dependency>
+
+
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
+                <inherited>true</inherited>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>22</source>
+                    <target>22</target>
                 </configuration>
             </plugin>
-            <!-- Exec Maven Plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -116,28 +149,20 @@
                     <mainClass>org.example.Main</mainClass>
                 </configuration>
             </plugin>
-            <!-- Maven Jar Plugin -->
             <plugin>
+                <!-- Surefire support for JUnit-5 -->
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.example.Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.1</version>
             </plugin>
         </plugins>
     </build>
 
     <properties>
-        <jersey.version>3.0.0</jersey.version>
+        <jersey.version>3.0.0</jersey.version> <!-- Versão estável do Jersey -->
         <junit-jupiter.version>5.10.1</junit-jupiter.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <surefire.mvn.plugin.version>3.2.1</surefire.mvn.plugin.version>
     </properties>
 
 </project>
