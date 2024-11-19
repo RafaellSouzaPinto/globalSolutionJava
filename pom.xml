@@ -63,19 +63,6 @@
             <version>3.0.0</version>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId> <!-- Use este se você estiver usando MySQL -->
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.30</version>
-        </dependency>
-        <!-- Descomente abaixo se estiver usando PostgreSQL -->
-        <!--
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.3.3</version>
-        </dependency>
-        -->
-        <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>3.1.1</version>
@@ -104,36 +91,21 @@
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
-
-            <!-- Dependência do Spring Web -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>5.3.10</version> <!-- Verifique a versão desejada -->
-        </dependency>
-
-            <!-- Dependência do Spring Web MVC -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>5.3.10</version> <!-- Verifique a versão desejada -->
-        </dependency>
-
-
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
-                <inherited>true</inherited>
                 <configuration>
-                    <source>22</source>
-                    <target>22</target>
+                    <source>17</source> <!-- Alterado de 22 para 17 -->
+                    <target>17</target>
                 </configuration>
             </plugin>
+            <!-- Exec Plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -149,8 +121,8 @@
                     <mainClass>org.example.Main</mainClass>
                 </configuration>
             </plugin>
+            <!-- Surefire Plugin para JUnit -->
             <plugin>
-                <!-- Surefire support for JUnit-5 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.1</version>
@@ -159,10 +131,11 @@
     </build>
 
     <properties>
-        <jersey.version>3.0.0</jersey.version> <!-- Versão estável do Jersey -->
+        <jersey.version>3.0.0</jersey.version>
         <junit-jupiter.version>5.10.1</junit-jupiter.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <surefire.mvn.plugin.version>3.2.1</surefire.mvn.plugin.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
 </project>
