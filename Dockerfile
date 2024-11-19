@@ -1,14 +1,17 @@
-# Use a imagem base do Java
-FROM eclipse-temurin:17-jdk-jammy
+# Usar a imagem base do Java com Maven instalado
+FROM maven:3.8.6-eclipse-temurin-17
 
-# Configure o diretório de trabalho
+# Criar e definir o diretório de trabalho
 WORKDIR /app
 
-# Copie o projeto para dentro da imagem
+# Copiar o código do projeto para dentro da imagem
 COPY . /app
 
-# Execute o comando de build (assumindo que você usa Maven)
-RUN ./mvnw clean package
+# Executar o comando de build usando Maven
+RUN mvn clean package
 
-# Especifique o comando para iniciar o servidor
+# Expor a porta usada pela aplicação
+EXPOSE 8080
+
+# Comando para iniciar o servidor
 CMD ["java", "-jar", "target/GlobalSolution-1.0-SNAPSHOT.jar"]
