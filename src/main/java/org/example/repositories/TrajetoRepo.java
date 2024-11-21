@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,7 +164,7 @@ public class TrajetoRepo {
 
     public List<Trajeto> buscarPorPessoaId(int pessoaId) throws SQLException {
         logger.info("Buscando trajetos para pessoa ID: " + pessoaId);
-        String sql = "SELECT * FROM trajetos WHERE pessoa_id = ?";
+        String sql = "SELECT * FROM trajetos WHERE pessoa_id = ? ORDER BY data_trajeto DESC" ;
         List<Trajeto> trajetos = new ArrayList<>();
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -179,6 +181,10 @@ public class TrajetoRepo {
                 trajeto.setMeioDeTransporte(rs.getString("meio_de_transporte"));
                 trajeto.setOrigem(rs.getString("origem"));
                 trajeto.setDestino(rs.getString("destino"));
+                LocalDateTime dataTrajeto = rs.getTimestamp("data_trajeto").toLocalDateTime();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm:ss,SSSSSSSSS");
+                trajeto.setData(dataTrajeto.format(formatter)); // Armazena como String formatada
+
                 trajetos.add(trajeto);
             }
             logger.info("Total de trajetos encontrados para pessoa ID: " + pessoaId + ": " + trajetos.size());

@@ -1,5 +1,8 @@
 package org.example.entities;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 public class Trajeto {
     private int id;
     private Pessoa pessoa;
@@ -8,10 +11,11 @@ public class Trajeto {
     private int pontos;
     private String origem;
     private String destino;
+    private String data;
 
     public Trajeto() {}
 
-    public Trajeto(int id, Pessoa pessoa, String meioDeTransporte, double distanciaKm, int pontos, String origem, String destino) {
+    public Trajeto(int id, Pessoa pessoa, String meioDeTransporte, double distanciaKm, int pontos, String origem, String destino, String data) {
         this.id = id;
         this.pessoa = pessoa;
         this.meioDeTransporte = meioDeTransporte;
@@ -19,6 +23,7 @@ public class Trajeto {
         this.pontos = pontos;
         this.origem = origem;
         this.destino = destino;
+        this.data = data;
     }
 
     public int getId() {
@@ -76,6 +81,15 @@ public class Trajeto {
     public void setDestino(String destino) {
         this.destino = destino;
     }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
     @Override
     public String toString() {
         return "Trajeto {" +
