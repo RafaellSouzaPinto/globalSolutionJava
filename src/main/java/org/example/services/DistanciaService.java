@@ -46,7 +46,6 @@ public class DistanciaService {
 
         JSONObject json = new JSONObject(content.toString());
 
-        // Handle potential API errors
         String status = json.getString("status");
         if (!status.equals("OK")) {
             String errorMessage = json.optString("error_message", "Unknown error");
@@ -63,7 +62,7 @@ public class DistanciaService {
     }
 
     public double calculateDistance(double[] origin, double[] destination) {
-        double earthRadius = 6371; // Earth's radius in kilometers
+        double earthRadius = 6371;
         double dLat = Math.toRadians(destination[0] - origin[0]);
         double dLng = Math.toRadians(destination[1] - origin[1]);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
@@ -80,22 +79,19 @@ public class DistanciaService {
             throw new Exception("Pessoa com ID " + pessoaId + " não encontrada.");
         }
 
-        // Obter coordenadas de origem e destino
         double[] origemCoord = geocodeAddress(origem);
         double[] destinoCoord = geocodeAddress(destino);
 
-        // Calcular a distância em quilômetros
         double distanciaKm = calculateDistance(origemCoord, destinoCoord);
-        System.out.println("Distância calculada: " + distanciaKm + " km");  // Debug
+        System.out.println("Distância calculada: " + distanciaKm + " km");
 
         Trajeto trajeto = new Trajeto();
         trajeto.setPessoa(pessoa);
         trajeto.setOrigem(origem);
         trajeto.setDestino(destino);
-        trajeto.setDistanciaKm(distanciaKm); // Definindo a distância no trajeto
+        trajeto.setDistanciaKm(distanciaKm);
         trajeto.setMeioDeTransporte(meioDeTransporte);
 
-        // Calcula os pontos com base no plano
         int pontosBase = (int) Math.floor(distanciaKm);
         if ("Plano Super Verdí".equalsIgnoreCase(pessoa.getPlanos())) {
             trajeto.setPontos((int) Math.floor(pontosBase * 1.5));
@@ -106,7 +102,6 @@ public class DistanciaService {
 
         trajetoRepository.salvar(trajeto);
 
-        // Atualizar dados da pessoa
         double distanciaAcumulada = trajetoRepository.getTotalDistanciaByPessoaId(pessoaId);
         pessoa.setDistanciaAcumulada(distanciaAcumulada);
 
@@ -128,7 +123,7 @@ public class DistanciaService {
 
         System.out.println("Trajeto registrado com sucesso! Pontos acumulados: " + pontosTotais);
 
-        return trajeto; // Retorna o trajeto com distância e pontos calculados
+        return trajeto;
     }
 
 

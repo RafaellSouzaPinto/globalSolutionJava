@@ -164,7 +164,7 @@ public class TrajetoRepo {
 
     public List<Trajeto> buscarPorPessoaId(int pessoaId) throws SQLException {
         logger.info("Buscando trajetos para pessoa ID: " + pessoaId);
-        String sql = "SELECT * FROM trajetos WHERE pessoa_id = ? ORDER BY data_trajeto DESC" ;
+        String sql = "SELECT * FROM trajetos WHERE pessoa_id = ? ORDER BY data_trajeto ASC" ;
         List<Trajeto> trajetos = new ArrayList<>();
 
         try (Connection conn = ConnectionFactory.getConnection();

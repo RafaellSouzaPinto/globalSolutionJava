@@ -129,26 +129,47 @@ public class PessoaRepo {
 
 
     public boolean excluirConta(int pessoaId) throws SQLException {
+
         logger.info("Tentando excluir conta para o ID da pessoa: " + pessoaId);
-        TrajetoRepo trajetoRepo = new TrajetoRepo();
+        String sqlExcluirTrajetos = "DELETE FROM trajetos WHERE pessoa_id = ?";
+        String sqlExcluirResgates = "DELETE FROM resgates WHERE pessoa_id = ?";
+        String sqlExcluirPessoa = "DELETE FROM pessoas WHERE id = ?";
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement stmtTrajetos = conn.prepareStatement(sqlExcluirTrajetos)) {
+                stmtTrajetos.setInt(1, pessoaId);
+                int trajetosExcluidos = stmtTrajetos.executeUpdate();
+                logger.info("Trajetos excluídos: " + trajetosExcluidos + " para o ID da pessoa: " + pessoaId);
+            }
 
-        try {
-            trajetoRepo.excluirTrajetosPorPessoaId(pessoaId);
+            try (PreparedStatement stmtResgates = conn.prepareStatement(sqlExcluirResgates)) {
+                stmtResgates.setInt(1, pessoaId);
+                int resgatesExcluidos = stmtResgates.executeUpdate();
+                logger.info("Resgates excluídos: " + resgatesExcluidos + " para o ID da pessoa: " + pessoaId);
+            }
 
-            String sql = "DELETE FROM pessoas WHERE id = ?";
-            try (Connection conn = ConnectionFactory.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-                stmt.setInt(1, pessoaId);
-                int rowsAffected = stmt.executeUpdate();
+            try (PreparedStatement stmtPessoa = conn.prepareStatement(sqlExcluirPessoa)) {
+                stmtPessoa.setInt(1, pessoaId);
+                int pessoaExcluida = stmtPessoa.executeUpdate();
                 logger.info("Conta excluída com sucesso para o ID da pessoa: " + pessoaId);
-                return rowsAffected > 0;
+                conn.commit();
+                return pessoaExcluida > 0;
+            } catch (SQLException e) {
+                conn.rollback();
+                logger.error("Erro ao excluir a pessoa com ID: " + pessoaId, e);
+                throw e;
             }
         } catch (SQLException e) {
-            logger.error("Erro ao excluir conta para o ID da pessoa: " + pessoaId, e);
+
+            logger.error("Erro ao conectar ao banco de dados ou ao excluir conta para o ID da pessoa: " + pessoaId, e);
+
             throw e;
+
         }
+
     }
+
+
 
     public boolean emailExiste(String email) throws SQLException {
         String sql = "SELECT COUNT(*) FROM pessoas WHERE email = ?";

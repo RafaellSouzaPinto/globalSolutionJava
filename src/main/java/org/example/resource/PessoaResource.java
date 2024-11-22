@@ -24,7 +24,6 @@ public class PessoaResource {
     @Path("/cadastro")
     public Response cadastrarPessoa(Pessoa pessoa) {
         try {
-            // Validação de atributos obrigatórios, incluindo o plano
             if (pessoa.getNome() == null || pessoa.getNome().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Nome é obrigatório.").build();
             }
@@ -41,7 +40,6 @@ public class PessoaResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Plano inválido. Escolha entre 'Plano Verdí' e 'Plano Super Verdí'.").build();
             }
 
-            // Verificação de duplicidade de CPF e Email
             if (pessoaService.cpfOuEmailExistem(pessoa)) {
                 return Response.status(Response.Status.CONFLICT).entity("CPF ou Email já cadastrado.").build();
             }
@@ -59,7 +57,6 @@ public class PessoaResource {
 
 
 
-    // 2. Login
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -67,10 +64,8 @@ public class PessoaResource {
         try {
             Pessoa usuario = pessoaRepo.login(pessoa.getEmail(), pessoa.getSenha());
             if (usuario != null) {
-                // Sucesso no login
                 return Response.ok(usuario).build();
             } else {
-                // Credenciais inválidas
                 return Response.status(Response.Status.UNAUTHORIZED).entity("Email ou senha inválidos.").build();
             }
         } catch (Exception e) {
@@ -78,24 +73,20 @@ public class PessoaResource {
         }
     }
 
-    // 3. Alteração de Senha
     @PUT
     @Path("/{id}/alterarSenha")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response alterarSenha(@PathParam("id") int id, Map<String, String> body) {
         try {
-            // Extrair as senhas do JSON
             String senhaAtual = body.get("senhaAtual");
             String novaSenha = body.get("novaSenha");
 
-            // Validar nova senha
             if (novaSenha == null || novaSenha.length() < 8) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("A nova senha deve ter no mínimo 8 caracteres.").build();
             }
 
-            // Alterar senha no repositório
             boolean sucesso = pessoaRepo.alterarSenha(id, senhaAtual, novaSenha);
             if (sucesso) {
                 return Response.ok("Senha alterada com sucesso.").build();
@@ -112,7 +103,6 @@ public class PessoaResource {
 
 
 
-    // 4. Exclusão de Conta
     @DELETE
     @Path("/{id}")
     public Response excluirConta(@PathParam("id") int id) {
@@ -157,10 +147,8 @@ public class PessoaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response trocarPlano(@PathParam("id") int id, Map<String, String> body) {
         try {
-            // Extrair o novo plano do corpo da requisição
             String novoPlano = body.get("novoPlano");
 
-            // Validar o novo plano
             if (novoPlano == null ||
                     (!"Plano Verdí".equalsIgnoreCase(novoPlano) && !"Plano Super Verdí".equalsIgnoreCase(novoPlano))) {
                 return Response.status(Response.Status.BAD_REQUEST)
@@ -168,7 +156,6 @@ public class PessoaResource {
                         .build();
             }
 
-            // Buscar o usuário pelo ID
             Pessoa pessoa = pessoaRepo.getPessoaById(id);
             if (pessoa == null) {
                 return Response.status(Response.Status.NOT_FOUND)
@@ -176,14 +163,12 @@ public class PessoaResource {
                         .build();
             }
 
-            // Verificar se o usuário já está no plano solicitado
             if (pessoa.getPlanos().equalsIgnoreCase(novoPlano)) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("O usuário já está no plano escolhido.")
                         .build();
             }
 
-            // Atualizar o plano no banco de dados
             boolean sucesso = pessoaRepo.trocarPlano(id, novoPlano);
             if (sucesso) {
                 return Response.ok("Plano alterado com sucesso para: " + novoPlano).build();

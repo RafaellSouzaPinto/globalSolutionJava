@@ -24,6 +24,7 @@ public class TrajetoResource {
         this.pessoaRepo = new PessoaRepo();
         this.distanciaService = new DistanciaService(trajetoRepository, pessoaRepo);
     }
+    //
     @POST
     @Path("/registrar")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -39,7 +40,6 @@ public class TrajetoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Parâmetro 'meioDeTransporte' é obrigatório.").build();
             }
 
-            // Chama o serviço e obtém o trajeto com dados atualizados
             Trajeto trajetoRegistrado = distanciaService.registrarTrajeto(
                     trajeto.getPessoa().getId(),
                     trajeto.getOrigem(),
@@ -47,7 +47,6 @@ public class TrajetoResource {
                     trajeto.getMeioDeTransporte()
             );
 
-            // Cria a resposta com os dados calculados
             Map<String, Object> response = new HashMap<>();
             response.put("mensagem", "Trajeto registrado com sucesso!");
             response.put("distanciaKm", trajetoRegistrado.getDistanciaKm());
@@ -59,6 +58,7 @@ public class TrajetoResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao registrar trajeto: " + e.getMessage()).build();
         }
     }
+    //
     @GET
     @Path("/usuario/{pessoaId}")
     public Response buscarTrajetosPorPessoaId(@PathParam("pessoaId") int pessoaId) {
@@ -92,6 +92,7 @@ public class TrajetoResource {
     }
 
 
+    //
     @GET
     @Path("/usuario/{pessoaId}/total")
     public Response consultarPontosECreditos(@PathParam("pessoaId") int pessoaId) {
